@@ -72,7 +72,10 @@ public class ByteFont {
 	}
 
 	protected boolean addChar(char c, byte[][] bytes) {
-		return byteChars.putIfAbsent(c, bytes) == null;
+		if(byteChars.containsKey(c)) {
+			return false;
+		}
+		return byteChars.put(c, bytes) == null;
 	}
 
 	public static ByteFont fromMeta(HashMap<String, Object> meta) {
@@ -83,11 +86,12 @@ public class ByteFont {
 			int size = Integer.parseInt(String.valueOf(meta.get("size")));
 			int style = Integer.parseInt(String.valueOf(meta.get("style")));
 
-			if(!name.equals("null") && size > 0 && style > 0) {
+			if(!name.equals("null") && size > 0) {
 				result = new ByteFont(name, size, style);
 
 				if(meta.containsKey("height")) {
-					result.setHeight(Integer.parseInt(String.valueOf(meta.getOrDefault("height", -1))));
+					String tmp = String.valueOf(meta.get("height"));
+					result.setHeight(!tmp.equals("null") ? Integer.parseInt(tmp) : -1);
 				}
 			}
 		} catch (Exception e) {

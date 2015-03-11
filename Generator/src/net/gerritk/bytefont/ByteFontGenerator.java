@@ -1,7 +1,6 @@
 package net.gerritk.bytefont;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -68,15 +67,15 @@ public class ByteFontGenerator {
                 writer.write("BEGIN " + i);
                 writer.newLine();
 
-                for(int y = 0; y < byteChar[0].length; y++) {
+                for(int x = 0; x < byteChar.length; x++) {
 					writer.write("  ");
-                    for(int x = 0; x < byteChar.length; x++) {
+                    for(int y = 0; y < byteChar[x].length; y++) {
                         writer.write(Integer.toHexString(Byte.toUnsignedInt(byteChar[x][y])));
-                        if(x < byteChar.length - 1) {
+                        if(y < byteChar[x].length - 1) {
                             writer.write(";");
                         }
                     }
-                    if(y < byteChar[0].length - 1) {
+                    if(x < byteChar.length - 1) {
                         writer.newLine();
                     }
                 }
@@ -95,10 +94,9 @@ public class ByteFontGenerator {
 
     public static byte[][] getByteChar(char c, Graphics2D g, BufferedImage img) {
         FontMetrics metrics = g.getFontMetrics();
-        Rectangle2D bounds = metrics.getStringBounds("" + c, g);
 
         int bh = metrics.getHeight() % 8 > 0 ? (metrics.getHeight() + 4) / 8 + 1 : metrics.getHeight() / 8;
-        byte[][] result = new byte[(int) bounds.getWidth()][bh];
+        byte[][] result = new byte[metrics.charWidth(c)][bh];
 
         StringBuilder builder = new StringBuilder();
         builder.append("\n");
@@ -112,7 +110,7 @@ public class ByteFontGenerator {
 
         for (int y = 0; y < metrics.getHeight(); y++) {
             builder.append(String.format("%d:\t", y));
-            for (int x = 0; x < bounds.getWidth(); x++) {
+            for (int x = 0; x < metrics.charWidth(c); x++) {
                 Color color = new Color(img.getRGB(x, y));
                 if (color.equals(Color.BLACK)) {
                     builder.append("#");
