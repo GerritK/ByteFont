@@ -1,0 +1,7 @@
+-o <filename>                   - to define the output file (default <fontfamily>_<size>_<style>.bff)
+-c                              - to enable comments in the output file
+-v <level>                      - to set the verbosity level (default 1; range 0 - 3; 0 = none; 3 = debug)
+-f <fontfamily>                 - to set the font family (default Arial)
+-s <fontsize>                   - to set the font size (default 10)
+-y <fontstyle>                  - to set the font style (default plain(0); valid is p/plain/0, b/bold/1, i/italic/2)
+-r <range-start> [range-end]    - to define the range of chars exclusive the end value to generate the font (default 0 - 256)
